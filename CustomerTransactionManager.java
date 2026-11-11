@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 
 public class CustomerTransactionManager {
@@ -6,18 +7,14 @@ public class CustomerTransactionManager {
 
         System.out.print("Enter number of customer transactions: ");
         int count = scanner.nextInt();
-        scanner.nextLine(); // Consume newline buffer
+        scanner.nextLine();
 
-        // Task 1 & 2: Transaction IDs (String array)[span_0](start_span)[span_0](end_span)
         String[] transactionIds = new String[count];
 
-        // Task 2a: 1D Array for Total Amounts[span_1](start_span)[span_1](end_span)
         double[] transactionAmounts = new double[count];
 
-        // Task 2b: 2D Array for Multi-Item Details [Customer][Item Category][span_2](start_span)[span_2](end_span)
         double[][] itemDetails = new double[count][3];
 
-        // Task 2c & Input loop using Scanner[span_3](start_span)[span_3](end_span)
         for (int i = 0; i < count; i++) {
             System.out.println("\n--- Customer " + (i + 1) + " ---");
             System.out.print("Enter Transaction ID (e.g., TXN-101): ");
@@ -25,17 +22,16 @@ public class CustomerTransactionManager {
 
             System.out.print("Enter Total Transaction Amount: $");
             transactionAmounts[i] = scanner.nextDouble();
-            scanner.nextLine(); // Consume newline buffer
+            scanner.nextLine();
 
             System.out.println("Enter breakdown for 3 item categories (e.g., Electronics, Clothing, Groceries):");
             for (int j = 0; j < 3; j++) {
                 System.out.print("  Category " + (j + 1) + ": $");
                 itemDetails[i][j] = scanner.nextDouble();
             }
-            scanner.nextLine(); // Consume newline buffer
+            scanner.nextLine();
         }
 
-        // Task 3: Sorting Algorithm Selection Menu[span_4](start_span)[span_4](end_span)
         System.out.println("\n==================================================");
         System.out.println("       SELECT A SORTING ALGORITHM                 ");
         System.out.println("==================================================");
@@ -50,7 +46,6 @@ public class CustomerTransactionManager {
         String orderChoice = scanner.next().toUpperCase();
         boolean ascending = orderChoice.equals("ASC");
 
-        // Execute chosen sorting algorithm
         switch (sortChoice) {
             case 'A':
                 bubbleSort(transactionAmounts, transactionIds, itemDetails, ascending);
@@ -74,7 +69,6 @@ public class CustomerTransactionManager {
                 break;
         }
 
-        // Output formatted summary table of sorted data[span_5](start_span)[span_5](end_span)
         System.out.println("\n======================================================================");
         System.out.println("                SORTED CUSTOMER TRANSACTIONS REPORT                   ");
         System.out.println("======================================================================");
@@ -82,11 +76,11 @@ public class CustomerTransactionManager {
         System.out.println("----------------------------------------------------------------------");
 
         for (int i = 0; i < count; i++) {
-            System.out.printf("%-15s | $%-17.2f | $%.2f, $%.2f, $%.2f\n", 
-                transactionIds[i], 
-                transactionAmounts[i], 
-                itemDetails[i][0], 
-                itemDetails[i][1], 
+            System.out.printf("%-15s | $%-17.2f | $%.2f, $%.2f, $%.2f\n",
+                transactionIds[i],
+                transactionAmounts[i],
+                itemDetails[i][0],
+                itemDetails[i][1],
                 itemDetails[i][2]);
         }
         System.out.println("======================================================================");
@@ -94,7 +88,6 @@ public class CustomerTransactionManager {
         scanner.close();
     }
 
-    // --- Option A: Bubble Sort ---
     public static void bubbleSort(double[] amounts, String[] ids, double[][] details, boolean ascending) {
         int n = amounts.length;
         for (int i = 0; i < n - 1; i++) {
@@ -107,7 +100,6 @@ public class CustomerTransactionManager {
         }
     }
 
-    // --- Option B: Selection Sort ---
     public static void selectionSort(double[] amounts, String[] ids, double[][] details, boolean ascending) {
         int n = amounts.length;
         for (int i = 0; i < n - 1; i++) {
@@ -124,7 +116,6 @@ public class CustomerTransactionManager {
         }
     }
 
-    // --- Option C: Insertion Sort ---
     public static void insertionSort(double[] amounts, String[] ids, double[][] details, boolean ascending) {
         int n = amounts.length;
         for (int i = 1; i < n; i++) {
@@ -145,7 +136,6 @@ public class CustomerTransactionManager {
         }
     }
 
-    // --- Option D: Merge Sort Wrapper ---
     public static void mergeSortWrapper(double[] amounts, String[] ids, double[][] details, boolean ascending) {
         mergeSort(amounts, ids, details, 0, amounts.length - 1, ascending);
     }
@@ -215,7 +205,6 @@ public class CustomerTransactionManager {
         }
     }
 
-    // Helper method to swap elements across parallel arrays safely
     private static void swap(double[] amounts, String[] ids, double[][] details, int i, int j) {
         double tempAmount = amounts[i];
         amounts[i] = amounts[j];
