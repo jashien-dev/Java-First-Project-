@@ -1,47 +1,84 @@
 
 import java.util.Scanner;
 
-public class CustomerTransactionManager {
+public class CustomerTransactionsManager {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        // Task 1: Dynamic Data Input
         System.out.print("Enter number of customer transactions: ");
         int count = scanner.nextInt();
         scanner.nextLine();
 
-        // Task 1 & 2: Transaction IDs (String Array)
-        String[] transactionIds = new String[count];
+        if (count <= 0) {
+            System.out.println("Invalid number of transactions.");
+            scanner.close();
+            return;
+        }
 
         // Task 2a: 1D Array for Total Amounts
+        String[] transactionIds = new String[count];
         double[] transactionAmounts = new double[count];
 
         // Task 2b: 2D Array for Item Details
         double[][] itemDetails = new double[count][3];
 
-        // Task 2c: Input Loop using Scanner
+        // Task 1 & 2c: Input Loop using Scanner
         for (int i = 0; i < count; i++) {
+
             System.out.println("\n--- Customer " + (i + 1) + " ---");
 
-            System.out.print("Enter Transaction ID (e.g., TXN-101): ");
+            System.out.print("Enter Transaction ID: ");
             transactionIds[i] = scanner.nextLine();
 
             System.out.print("Enter Total Transaction Amount: $");
             transactionAmounts[i] = scanner.nextDouble();
-            scanner.nextLine();
 
             System.out.println("Enter breakdown for 3 item categories:");
 
             for (int j = 0; j < 3; j++) {
-                System.out.print("  Category " + (j + 1) + ": $");
+                System.out.print("Category " + (j + 1) + ": $");
                 itemDetails[i][j] = scanner.nextDouble();
             }
 
             scanner.nextLine();
         }
 
+        // Task 2c: Display Raw Data using Nested Loops
+        System.out.println("\n==============================================================");
+        System.out.println("                  RAW CUSTOMER TRANSACTIONS                  ");
+        System.out.println("==============================================================");
+
+        System.out.printf("%-15s | %-18s | %-28s\n",
+                "Transaction ID",
+                "Total Amount ($)",
+                "Item Breakdown");
+
+        System.out.println("--------------------------------------------------------------");
+
+        for (int i = 0; i < count; i++) {
+
+            System.out.printf("%-15s | $%-17.2f | ",
+                    transactionIds[i],
+                    transactionAmounts[i]);
+
+            for (int j = 0; j < 3; j++) {
+                System.out.printf("$%.2f", itemDetails[i][j]);
+
+                if (j < 2) {
+                    System.out.print(", ");
+                }
+            }
+
+            System.out.println();
+        }
+
+        System.out.println("==============================================================");
+
         // Task 3: Sorting Algorithm Selection Menu
         System.out.println("\n==================================================");
-        System.out.println("       SELECT A SORTING ALGORITHM");
+        System.out.println("          SELECT A SORTING ALGORITHM             ");
         System.out.println("==================================================");
         System.out.println("Option A: Bubble Sort");
         System.out.println("Option B: Selection Sort");
@@ -51,60 +88,75 @@ public class CustomerTransactionManager {
         System.out.print("Enter your choice (A, B, C, or D): ");
         char sortChoice = scanner.next().toUpperCase().charAt(0);
 
-        System.out.print("Choose order - Enter 'ASC' or 'DESC': ");
+        System.out.print("Choose order (ASC or DESC): ");
         String orderChoice = scanner.next().toUpperCase();
+
         boolean ascending = orderChoice.equals("ASC");
 
-        // Execute Chosen Sorting Algorithm
+        // Execute Selected Sorting Algorithm
         switch (sortChoice) {
+
             case 'A':
-                bubbleSort(transactionAmounts, transactionIds, itemDetails, ascending);
+                bubbleSort(transactionAmounts, transactionIds,
+                        itemDetails, ascending);
                 System.out.println("\n[Sorted using Bubble Sort]");
                 break;
 
             case 'B':
-                selectionSort(transactionAmounts, transactionIds, itemDetails, ascending);
+                selectionSort(transactionAmounts, transactionIds,
+                        itemDetails, ascending);
                 System.out.println("\n[Sorted using Selection Sort]");
                 break;
 
             case 'C':
-                insertionSort(transactionAmounts, transactionIds, itemDetails, ascending);
+                insertionSort(transactionAmounts, transactionIds,
+                        itemDetails, ascending);
                 System.out.println("\n[Sorted using Insertion Sort]");
                 break;
 
             case 'D':
-                mergeSortWrapper(transactionAmounts, transactionIds, itemDetails, ascending);
+                mergeSortWrapper(transactionAmounts, transactionIds,
+                        itemDetails, ascending);
                 System.out.println("\n[Sorted using Merge Sort]");
                 break;
 
             default:
-                System.out.println("\nInvalid choice. Defaulting to Bubble Sort (Ascending).");
-                bubbleSort(transactionAmounts, transactionIds, itemDetails, true);
+                System.out.println("\nInvalid choice. Defaulting to Bubble Sort.");
+                bubbleSort(transactionAmounts, transactionIds,
+                        itemDetails, true);
                 break;
         }
 
-        // Output Formatted Summary Table
-        System.out.println("\n======================================================================");
-        System.out.println("                SORTED CUSTOMER TRANSACTIONS REPORT");
-        System.out.println("======================================================================");
+        // Display Sorted Customer Transactions
+        System.out.println("\n==============================================================");
+        System.out.println("                SORTED CUSTOMER TRANSACTIONS                 ");
+        System.out.println("==============================================================");
 
         System.out.printf("%-15s | %-18s | %-28s\n",
                 "Transaction ID",
                 "Total Amount ($)",
-                "Item Breakdown (1, 2, 3)");
+                "Item Breakdown");
 
-        System.out.println("----------------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------");
 
         for (int i = 0; i < count; i++) {
-            System.out.printf("%-15s | $%-17.2f | $%.2f, $%.2f, $%.2f\n",
+
+            System.out.printf("%-15s | $%-17.2f | ",
                     transactionIds[i],
-                    transactionAmounts[i],
-                    itemDetails[i][0],
-                    itemDetails[i][1],
-                    itemDetails[i][2]);
+                    transactionAmounts[i]);
+
+            for (int j = 0; j < 3; j++) {
+                System.out.printf("$%.2f", itemDetails[i][j]);
+
+                if (j < 2) {
+                    System.out.print(", ");
+                }
+            }
+
+            System.out.println();
         }
 
-        System.out.println("======================================================================");
+        System.out.println("==============================================================");
 
         scanner.close();
     }
@@ -162,6 +214,7 @@ public class CustomerTransactionManager {
         int n = amounts.length;
 
         for (int i = 1; i < n; i++) {
+
             double keyAmount = amounts[i];
             String keyId = ids[i];
             double[] keyRow = details[i];
@@ -189,13 +242,15 @@ public class CustomerTransactionManager {
     public static void mergeSortWrapper(double[] amounts, String[] ids,
             double[][] details, boolean ascending) {
 
-        mergeSort(amounts, ids, details, 0, amounts.length - 1, ascending);
+        mergeSort(amounts, ids, details,
+                0, amounts.length - 1, ascending);
     }
 
     private static void mergeSort(double[] amounts, String[] ids,
             double[][] details, int left, int right, boolean ascending) {
 
         if (left < right) {
+
             int mid = left + (right - left) / 2;
 
             mergeSort(amounts, ids, details, left, mid, ascending);
