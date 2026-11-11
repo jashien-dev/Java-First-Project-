@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 
 public class CustomerTransactionManager {
@@ -6,100 +7,121 @@ public class CustomerTransactionManager {
 
         System.out.print("Enter number of customer transactions: ");
         int count = scanner.nextInt();
-        scanner.nextLine(); // Consume newline buffer
+        scanner.nextLine();
 
-        // Task 1 & 2: Transaction IDs (String array)[span_0](start_span)[span_0](end_span)
+        // Task 1 & 2: Transaction IDs (String Array)
         String[] transactionIds = new String[count];
 
-        // Task 2a: 1D Array for Total Amounts[span_1](start_span)[span_1](end_span)
+        // Task 2a: 1D Array for Total Amounts
         double[] transactionAmounts = new double[count];
 
-        // Task 2b: 2D Array for Multi-Item Details [Customer][Item Category][span_2](start_span)[span_2](end_span)
+        // Task 2b: 2D Array for Item Details
         double[][] itemDetails = new double[count][3];
 
-        // Task 2c & Input loop using Scanner[span_3](start_span)[span_3](end_span)
+        // Task 2c: Input Loop using Scanner
         for (int i = 0; i < count; i++) {
             System.out.println("\n--- Customer " + (i + 1) + " ---");
+
             System.out.print("Enter Transaction ID (e.g., TXN-101): ");
             transactionIds[i] = scanner.nextLine();
 
             System.out.print("Enter Total Transaction Amount: $");
             transactionAmounts[i] = scanner.nextDouble();
-            scanner.nextLine(); // Consume newline buffer
+            scanner.nextLine();
 
-            System.out.println("Enter breakdown for 3 item categories (e.g., Electronics, Clothing, Groceries):");
+            System.out.println("Enter breakdown for 3 item categories:");
+
             for (int j = 0; j < 3; j++) {
                 System.out.print("  Category " + (j + 1) + ": $");
                 itemDetails[i][j] = scanner.nextDouble();
             }
-            scanner.nextLine(); // Consume newline buffer
+
+            scanner.nextLine();
         }
 
-        // Task 3: Sorting Algorithm Selection Menu[span_4](start_span)[span_4](end_span)
+        // Task 3: Sorting Algorithm Selection Menu
         System.out.println("\n==================================================");
-        System.out.println("       SELECT A SORTING ALGORITHM                 ");
+        System.out.println("       SELECT A SORTING ALGORITHM");
         System.out.println("==================================================");
         System.out.println("Option A: Bubble Sort");
         System.out.println("Option B: Selection Sort");
         System.out.println("Option C: Insertion Sort");
         System.out.println("Option D: Merge Sort");
+
         System.out.print("Enter your choice (A, B, C, or D): ");
         char sortChoice = scanner.next().toUpperCase().charAt(0);
 
-        System.out.print("Choose order - Enter 'ASC' for Ascending or 'DESC' for Descending: ");
+        System.out.print("Choose order - Enter 'ASC' or 'DESC': ");
         String orderChoice = scanner.next().toUpperCase();
         boolean ascending = orderChoice.equals("ASC");
 
-        // Execute chosen sorting algorithm
+        // Execute Chosen Sorting Algorithm
         switch (sortChoice) {
             case 'A':
                 bubbleSort(transactionAmounts, transactionIds, itemDetails, ascending);
                 System.out.println("\n[Sorted using Bubble Sort]");
                 break;
+
             case 'B':
                 selectionSort(transactionAmounts, transactionIds, itemDetails, ascending);
                 System.out.println("\n[Sorted using Selection Sort]");
                 break;
+
             case 'C':
                 insertionSort(transactionAmounts, transactionIds, itemDetails, ascending);
                 System.out.println("\n[Sorted using Insertion Sort]");
                 break;
+
             case 'D':
                 mergeSortWrapper(transactionAmounts, transactionIds, itemDetails, ascending);
                 System.out.println("\n[Sorted using Merge Sort]");
                 break;
+
             default:
                 System.out.println("\nInvalid choice. Defaulting to Bubble Sort (Ascending).");
                 bubbleSort(transactionAmounts, transactionIds, itemDetails, true);
                 break;
         }
 
-        // Output formatted summary table of sorted data[span_5](start_span)[span_5](end_span)
+        // Output Formatted Summary Table
         System.out.println("\n======================================================================");
-        System.out.println("                SORTED CUSTOMER TRANSACTIONS REPORT                   ");
+        System.out.println("                SORTED CUSTOMER TRANSACTIONS REPORT");
         System.out.println("======================================================================");
-        System.out.printf("%-15s | %-18s | %-28s\n", "Transaction ID", "Total Amount ($)", "Item Breakdown (1, 2, 3)");
+
+        System.out.printf("%-15s | %-18s | %-28s\n",
+                "Transaction ID",
+                "Total Amount ($)",
+                "Item Breakdown (1, 2, 3)");
+
         System.out.println("----------------------------------------------------------------------");
 
         for (int i = 0; i < count; i++) {
-            System.out.printf("%-15s | $%-17.2f | $%.2f, $%.2f, $%.2f\n", 
-                transactionIds[i], 
-                transactionAmounts[i], 
-                itemDetails[i][0], 
-                itemDetails[i][1], 
-                itemDetails[i][2]);
+            System.out.printf("%-15s | $%-17.2f | $%.2f, $%.2f, $%.2f\n",
+                    transactionIds[i],
+                    transactionAmounts[i],
+                    itemDetails[i][0],
+                    itemDetails[i][1],
+                    itemDetails[i][2]);
         }
+
         System.out.println("======================================================================");
 
         scanner.close();
     }
 
-    // --- Option A: Bubble Sort ---
-    public static void bubbleSort(double[] amounts, String[] ids, double[][] details, boolean ascending) {
+    // Option A: Bubble Sort
+    public static void bubbleSort(double[] amounts, String[] ids,
+            double[][] details, boolean ascending) {
+
         int n = amounts.length;
+
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
-                boolean condition = ascending ? (amounts[j] > amounts[j + 1]) : (amounts[j] < amounts[j + 1]);
+
+                boolean condition = ascending
+                        ? amounts[j] > amounts[j + 1]
+                        : amounts[j] < amounts[j + 1];
+
                 if (condition) {
                     swap(amounts, ids, details, j, j + 1);
                 }
@@ -107,66 +129,95 @@ public class CustomerTransactionManager {
         }
     }
 
-    // --- Option B: Selection Sort ---
-    public static void selectionSort(double[] amounts, String[] ids, double[][] details, boolean ascending) {
+    // Option B: Selection Sort
+    public static void selectionSort(double[] amounts, String[] ids,
+            double[][] details, boolean ascending) {
+
         int n = amounts.length;
+
         for (int i = 0; i < n - 1; i++) {
             int targetIndex = i;
+
             for (int j = i + 1; j < n; j++) {
-                boolean condition = ascending ? (amounts[j] < amounts[targetIndex]) : (amounts[j] > amounts[targetIndex]);
+
+                boolean condition = ascending
+                        ? amounts[j] < amounts[targetIndex]
+                        : amounts[j] > amounts[targetIndex];
+
                 if (condition) {
                     targetIndex = j;
                 }
             }
+
             if (targetIndex != i) {
                 swap(amounts, ids, details, i, targetIndex);
             }
         }
     }
 
-    // --- Option C: Insertion Sort ---
-    public static void insertionSort(double[] amounts, String[] ids, double[][] details, boolean ascending) {
+    // Option C: Insertion Sort
+    public static void insertionSort(double[] amounts, String[] ids,
+            double[][] details, boolean ascending) {
+
         int n = amounts.length;
+
         for (int i = 1; i < n; i++) {
             double keyAmount = amounts[i];
             String keyId = ids[i];
             double[] keyRow = details[i];
+
             int j = i - 1;
 
-            while (j >= 0 && (ascending ? amounts[j] > keyAmount : amounts[j] < keyAmount)) {
+            while (j >= 0 && (ascending
+                    ? amounts[j] > keyAmount
+                    : amounts[j] < keyAmount)) {
+
                 amounts[j + 1] = amounts[j];
                 ids[j + 1] = ids[j];
                 details[j + 1] = details[j];
-                j = j - 1;
+
+                j--;
             }
+
             amounts[j + 1] = keyAmount;
             ids[j + 1] = keyId;
             details[j + 1] = keyRow;
         }
     }
 
-    // --- Option D: Merge Sort Wrapper ---
-    public static void mergeSortWrapper(double[] amounts, String[] ids, double[][] details, boolean ascending) {
+    // Option D: Merge Sort Wrapper
+    public static void mergeSortWrapper(double[] amounts, String[] ids,
+            double[][] details, boolean ascending) {
+
         mergeSort(amounts, ids, details, 0, amounts.length - 1, ascending);
     }
 
-    private static void mergeSort(double[] amounts, String[] ids, double[][] details, int left, int right, boolean ascending) {
+    private static void mergeSort(double[] amounts, String[] ids,
+            double[][] details, int left, int right, boolean ascending) {
+
         if (left < right) {
             int mid = left + (right - left) / 2;
+
             mergeSort(amounts, ids, details, left, mid, ascending);
             mergeSort(amounts, ids, details, mid + 1, right, ascending);
+
             merge(amounts, ids, details, left, mid, right, ascending);
         }
     }
 
-    private static void merge(double[] amounts, String[] ids, double[][] details, int left, int mid, int right, boolean ascending) {
+    private static void merge(double[] amounts, String[] ids,
+            double[][] details, int left, int mid, int right,
+            boolean ascending) {
+
         int n1 = mid - left + 1;
         int n2 = right - mid;
 
         double[] LAmounts = new double[n1];
         double[] RAmounts = new double[n2];
+
         String[] LIds = new String[n1];
         String[] RIds = new String[n2];
+
         double[][] LDetails = new double[n1][3];
         double[][] RDetails = new double[n2][3];
 
@@ -175,15 +226,23 @@ public class CustomerTransactionManager {
             LIds[i] = ids[left + i];
             LDetails[i] = details[left + i];
         }
+
         for (int j = 0; j < n2; j++) {
             RAmounts[j] = amounts[mid + 1 + j];
             RIds[j] = ids[mid + 1 + j];
             RDetails[j] = details[mid + 1 + j];
         }
 
-        int i = 0, j = 0, k = left;
+        int i = 0;
+        int j = 0;
+        int k = left;
+
         while (i < n1 && j < n2) {
-            boolean condition = ascending ? (LAmounts[i] <= RAmounts[j]) : (LAmounts[i] >= RAmounts[j]);
+
+            boolean condition = ascending
+                    ? LAmounts[i] <= RAmounts[j]
+                    : LAmounts[i] >= RAmounts[j];
+
             if (condition) {
                 amounts[k] = LAmounts[i];
                 ids[k] = LIds[i];
@@ -195,6 +254,7 @@ public class CustomerTransactionManager {
                 details[k] = RDetails[j];
                 j++;
             }
+
             k++;
         }
 
@@ -215,8 +275,10 @@ public class CustomerTransactionManager {
         }
     }
 
-    // Helper method to swap elements across parallel arrays safely
-    private static void swap(double[] amounts, String[] ids, double[][] details, int i, int j) {
+    // Helper Method: Swap Elements
+    private static void swap(double[] amounts, String[] ids,
+            double[][] details, int i, int j) {
+
         double tempAmount = amounts[i];
         amounts[i] = amounts[j];
         amounts[j] = tempAmount;
